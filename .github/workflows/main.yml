@@ -2,6 +2,10 @@ name: .NET CI
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,4 +21,7 @@ jobs:
     with:
       library-name: 'StangaNetLib.Observability'
       artifact-name: 'stanganetlib-observability-nuget'
+      # Auth attaches GITHUB_TOKEN to the StangaNet source declared in nuget.config
+      needs-github-packages-source: true
+      publish: ${{ github.event_name != 'pull_request' }}
     secrets: inherit
