@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <AssemblyName>StangaNetLib.Observability</AssemblyName>
+    <RootNamespace>StangaNetLib.Observability</RootNamespace>
+    <Description>ASP.NET Core observability middleware: correlation IDs, request logging, global exception handling, ETag, security headers, and PII log masking.</Description>
+    <PackageTags>observability;middleware;correlation-id;etag;security-headers;logging;aspnetcore</PackageTags>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Required: ASP.NET Core types (HttpContext, IMiddleware, etc.) -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+
+    <!-- Stanga foundation -->
+
+    <!-- Logging abstractions (explicit for clarity) -->
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="StangaNetLib.Core" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="StangaNetLib.Observability.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>
