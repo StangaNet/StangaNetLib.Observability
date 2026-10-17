@@ -4,24 +4,24 @@
 ![NuGet](https://img.shields.io/badge/nuget-1.0.0-blue)
 ![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0-512BD4)
 
-StangaNetLib.Observability is an ASP.NET Core middleware suite for correlation IDs, structured request logging, global exception handling (RFC 7807 ProblemDetails), ETag conditional requests, security headers, and PII log masking. It integrates with `StangaNetLib.Core` (`Result<T>`, `Guard`, `DomainException`).
+ASP.NET Core observability middleware: correlation IDs, structured request logging, global exception handling (RFC 7807 ProblemDetails), ETag conditional requests, security headers, and PII log masking. Integrates with [`StangaNetLib.Core`](https://github.com/StangaNet/StangaNetLib.Core) (`Result`, `Guard`, `DomainException`).
 
 ## Design Philosophy
 
-- **Domain-Centric**: Cross-cutting concerns organized by purpose (Correlation, Masking, Middleware) rather than technical layers.
-- **Functional Error Handling**: PII masking APIs return `Result<T>` from `StangaNetLib.Core`.
-- **Defensive Programming**: Uses `Guard.Against` from Core for input validation.
-- **Modern Standards**: Optimized for .NET 8.0 and 9.0 with OpenTelemetry-friendly correlation (Activity TraceId).
+- **Domain-centric**: correlation, masking, and middleware as capabilities.
+- **Functional failures**: PII masking returns `Result<T>` from Core.
+- **Defensive programming**: `Guard.Against` for input validation.
+- **Modern .NET**: `net8.0` / `net9.0` with OpenTelemetry-friendly correlation.
 
 ## Installation
 
-The package is hosted on **GitHub Packages**.
+The package is hosted on **GitHub Packages** (pulls Core from the same feed).
 
 ```xml
-<!-- NuGet.config — add the GitHub Packages source -->
+<!-- NuGet.config — source key must match your packageSourceCredentials -->
 <configuration>
   <packageSources>
-    <add key="github" value="https://nuget.pkg.github.com/StangaNet/index.json" />
+    <add key="StangaNet" value="https://nuget.pkg.github.com/StangaNet/index.json" />
   </packageSources>
 </configuration>
 ```
@@ -31,69 +31,52 @@ The package is hosted on **GitHub Packages**.
 <PackageReference Include="StangaNetLib.Observability" Version="1.0.0" />
 ```
 
----
+See [CHANGELOG.md](./CHANGELOG.md) for release history.
 
 ## Core Components
 
-*The library is organized into functional namespaces. For implementation details, refer directly to the source code.*
-
-| Namespace | Core Components | Purpose |
-| :--- | :--- | :--- |
-| `StangaNetLib.Observability.Middleware` | `CorrelationIdMiddleware`, `ExceptionHandlingMiddleware`, `RequestLoggingMiddleware`, `ETagMiddleware`, `SecurityHeadersMiddleware` | HTTP pipeline cross-cutting concerns. |
-| `StangaNetLib.Observability.Correlation` | `ICorrelationIdAccessor` | Per-request correlation ID access. |
-| `StangaNetLib.Observability.Masking` | `ILogMaskingService`, `LogMaskingService` | PII masking for logs (email, IP, phone, name). |
-| `StangaNetLib.Observability.Options` | `ObservabilityOptions`, `SecurityHeadersOptions` | Configuration models. |
-| `StangaNetLib.Observability.Extensions` | `ServiceCollectionExtensions`, `ApplicationBuilderExtensions` | DI and pipeline registration. |
-
----
+| Namespace | Components | Purpose |
+|---|---|---|
+| `StangaNetLib.Observability.Middleware` | Correlation, logging, exceptions, ETag, security headers | HTTP pipeline |
+| `StangaNetLib.Observability.Correlation` | `ICorrelationIdAccessor` | Per-request ID |
+| `StangaNetLib.Observability.Masking` | `ILogMaskingService` | PII masking |
+| `StangaNetLib.Observability.Options` | `ObservabilityOptions`, `SecurityHeadersOptions` | Configuration |
+| `StangaNetLib.Observability.Extensions` | `AddStangaNetLibObservability`, `UseStangaNetLibObservability` | DI / pipeline |
 
 ## Project Structure
 
 ```
 StangaNetLib.Observability/
+├── assets/
+│   └── package-icon.png
+├── build/
+│   └── StangaNetLib.Observability.props
 ├── src/
 │   └── StangaNetLib.Observability/
-│       ├── Attributes/       # NoETagAttribute
-│       ├── Correlation/      # ICorrelationIdAccessor
-│       ├── Extensions/       # DI and pipeline registration
-│       ├── Masking/          # PII log masking
-│       ├── Middleware/       # HTTP middleware
-│       └── Options/          # Configuration
+│       ├── Attributes/
+│       ├── Correlation/
+│       ├── Extensions/
+│       ├── Masking/
+│       ├── Middleware/
+│       └── Options/
 └── tests/
     └── StangaNetLib.Observability.Tests/
 ```
 
----
-
 ## Quick Start
 
-### Registration
-
 ```csharp
-builder.Services.AddStangaNetLibObservability(opt =>
-{
-    opt.CorrelationIdHeader = "X-Correlation-Id";
-    opt.EnableETag = true;
-});
+builder.Services.AddStangaNetLibObservability();
 
 var app = builder.Build();
 app.UseStangaNetLibObservability();
 ```
 
-### PII Masking
+## CI/CD
 
-```csharp
-public class MyService(ILogMaskingService masking)
-{
-    public void LogUser(string email)
-    {
-        var masked = masking.MaskEmail(email);
-        if (masked.IsSuccess)
-            _logger.LogInformation("User {Email}", masked.Value);
-    }
-}
-```
+On push/PR to `main` and `workflow_dispatch`, the shared StangaNet workflow:
 
-## About
-
-ASP.NET Core observability middleware: correlation IDs, request logging, global exception handling, ETag, security headers, and PII log masking.
+1. Restores, builds, and tests on .NET 8 and .NET 9
+2. Packs the NuGet package (with symbols)
+3. Publishes to GitHub Packages outside pull requests
+4. Uploads the `.nupkg` as a build artifact
