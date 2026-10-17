@@ -3,27 +3,52 @@
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <AssemblyName>StangaNetLib.Observability</AssemblyName>
     <RootNamespace>StangaNetLib.Observability</RootNamespace>
-    <Description>ASP.NET Core observability middleware: correlation IDs, request logging, global exception handling, ETag, security headers, and PII log masking.</Description>
-    <PackageTags>observability;middleware;correlation-id;etag;security-headers;logging;aspnetcore</PackageTags>
     <Version>1.0.0</Version>
+    <Description>ASP.NET Core observability middleware: correlation IDs, request logging, global exception handling, ETag, security headers, and PII log masking. Depends on StangaNetLib.Core.</Description>
+    <PackageTags>observability;middleware;correlation-id;etag;security-headers;logging;aspnetcore;stanganet</PackageTags>
   </PropertyGroup>
-
-  <ItemGroup>
-    <!-- Required: ASP.NET Core types (HttpContext, IMiddleware, etc.) -->
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-
-    <!-- Stanga foundation -->
-
-    <!-- Logging abstractions (explicit for clarity) -->
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
-    <PackageReference Include="StangaNetLib.Core" />
-  </ItemGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="StangaNetLib.Observability.Tests" />
   </ItemGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="StangaNetLib.Core" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\build\**" Pack="true" PackagePath="build/" />
+  </ItemGroup>
+
+  <Target Name="StampBuildProps" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <_BuildPropsFile>$(MSBuildThisFileDirectory)..\..\build\StangaNetLib.Observability.props</_BuildPropsFile>
+    </PropertyGroup>
+    <ItemGroup>
+      <_BPLines Include="&lt;Project&gt;" />
+      <_BPLines Include="  &lt;ItemGroup&gt;" />
+      <_BPLines Include="    &lt;AssemblyAttribute Include=&quot;System.Reflection.AssemblyMetadataAttribute&quot;&gt;" />
+      <_BPLines Include="      &lt;_Parameter1&gt;StangaNetLib.Observability&lt;/_Parameter1&gt;" />
+      <_BPLines Include="      &lt;_Parameter2&gt;$(Version)&lt;/_Parameter2&gt;" />
+      <_BPLines Include="    &lt;/AssemblyAttribute&gt;" />
+      <_BPLines Include="  &lt;/ItemGroup&gt;" />
+      <_BPLines Include="&lt;/Project&gt;" />
+    </ItemGroup>
+    <WriteLinesToFile
+      File="$(_BuildPropsFile)"
+      Lines="@(_BPLines)"
+      Overwrite="true"
+      Encoding="UTF-8" />
+    <Message Text="StangaNetLib.Observability: stamped build props with version $(Version)" Importance="high" />
+  </Target>
+
+  <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\assets\package-icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\..\CHANGELOG.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>
