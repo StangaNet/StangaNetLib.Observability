@@ -3,8 +3,8 @@
     <AssemblyName>StangaNetLib.Observability.Tests</AssemblyName>
     <RootNamespace>StangaNetLib.Observability.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
-    <TargetFramework>net9.0</TargetFramework>
-
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <UseAppHost>true</UseAppHost>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,8 +14,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="FluentAssertions" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" VersionOverride="9.*" />
     <PackageReference Include="xunit.v3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" VersionOverride="8.*" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" VersionOverride="9.*" Condition="'$(TargetFramework)' == 'net9.0'" />
   </ItemGroup>
 
   <ItemGroup>
