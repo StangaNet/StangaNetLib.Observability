@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [1.0.1] - 2026-10-23
+
 ### Changed
 - Add `net10.0` target framework alongside `net8.0` and `net9.0`.
 - Require .NET SDK 10 (global.json) to multi-target `net8.0` / `net9.0` / `net10.0`; opt in Microsoft.Testing.Platform as the `dotnet test` runner.
@@ -29,5 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Unused local `Common/Result` and `Common/Guard` duplicates (use `StangaNetLib.Core`).
 
-[Unreleased]: https://github.com/StangaNet/StangaNetLib.Observability/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/StangaNet/StangaNetLib.Observability/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/StangaNet/StangaNetLib.Observability/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/StangaNet/StangaNetLib.Observability/releases/tag/v1.0.0

@@ -1,7 +1,7 @@
 # StangaNetLib.Observability
 
 [![.NET CI](https://github.com/StangaNet/StangaNetLib.Observability/actions/workflows/main.yml/badge.svg)](https://github.com/StangaNet/StangaNetLib.Observability/actions/workflows/main.yml)
-![NuGet](https://img.shields.io/badge/nuget-1.0.0-blue)
+![NuGet](https://img.shields.io/badge/nuget-1.0.1-blue)
 ![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0%20%7C%2010.0-512BD4)
 
 ASP.NET Core observability middleware: correlation IDs, structured request logging, global exception handling (RFC 7807 ProblemDetails), ETag conditional requests, security headers, and PII log masking. Integrates with [`StangaNetLib.Core`](https://github.com/StangaNet/StangaNetLib.Core) (`Result`, `Guard`, `DomainException`).
