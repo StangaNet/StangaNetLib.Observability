@@ -5,4 +5,4 @@
 - Keep public APIs documented (`///`) and options-driven via `ObservabilityOptions` / `SecurityHeadersOptions`.
 - DI: `AddStangaNetLibObservability`; pipeline: `UseStangaNetLibObservability`.
 - Match existing naming, file-scoped namespaces, and EditorConfig / Roslyn conventions.
-- Tests use xUnit v3 + FluentAssertions + TestHost; cover both `net8.0` and `net9.0` when changing shared behavior.
+- Tests use xUnit v3 + FluentAssertions + TestHost; cover `net8.0`, `net9.0`, and `net10.0` when changing shared behavior.
