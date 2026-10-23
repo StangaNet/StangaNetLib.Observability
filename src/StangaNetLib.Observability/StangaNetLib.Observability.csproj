@@ -3,7 +3,7 @@
     <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <AssemblyName>StangaNetLib.Observability</AssemblyName>
     <RootNamespace>StangaNetLib.Observability</RootNamespace>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
     <Description>ASP.NET Core observability middleware: correlation IDs, request logging, global exception handling, ETag, security headers, and PII log masking. Depends on StangaNetLib.Core.</Description>
     <PackageTags>observability;middleware;correlation-id;etag;security-headers;logging;aspnetcore;stanganet</PackageTags>
   </PropertyGroup>

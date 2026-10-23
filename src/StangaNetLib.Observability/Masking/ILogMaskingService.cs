@@ -58,4 +58,26 @@ public interface ILogMaskingService
     /// <param name="visibleChars">Number of leading characters to leave visible. Default: 2.</param>
     /// <returns>The masked string, wrapped in a <see cref="Result{T}"/>.</returns>
     Result<string> MaskString(string? value, int visibleChars = 2);
+
+    /// <summary>
+    /// Masks a monetary amount, replacing digits while preserving currency symbols and separators where practical.
+    /// Example: <c>"€ 1.234,56"</c> → <c>"€ *.***,**"</c>
+    /// </summary>
+    Result<string> MaskAmount(string? amount);
+
+    /// <summary>
+    /// Masks an IBAN-like value, keeping the first 4 and last 4 characters.
+    /// Example: <c>"IT60X0542811101000000123456"</c> → <c>"IT60*******************3456"</c>
+    /// </summary>
+    Result<string> MaskIban(string? iban);
+
+    /// <summary>
+    /// Scrubs free-text descriptions by masking embedded amounts, IBAN-like tokens, emails, and phone numbers.
+    /// </summary>
+    Result<string> MaskDescription(string? description);
+
+    /// <summary>
+    /// Financial / PII preset: applies amount, IBAN, then description scrubbing in sequence.
+    /// </summary>
+    Result<string> MaskFinancialPii(string? value);
 }
